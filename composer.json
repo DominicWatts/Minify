@@ -2,7 +2,7 @@
   "name": "dominicwatts/minify",
   "description": "Minify HTML including inline CSS and JS to speed up your site. Works with default Magento CSS/JS merger.",
   "type": "magento2-module",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "license": [
     "OSL-3.0"
   ],

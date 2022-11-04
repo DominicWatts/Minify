@@ -66,15 +66,11 @@ class Html
     public $jsCleanComments = true;
 
     /**
-     * Remove Comments.
-     *
      * @var bool
      */
     public $removeComments = true;
 
     /**
-     * Cache Compatibility.
-     *
      * @var bool
      */
     public $cacheCompatibility = false;
@@ -87,8 +83,6 @@ class Html
     public $maxMinification = false;
 
     /**
-     * Options
-     *
      * @var array
      */
     public $options = [];
@@ -97,7 +91,6 @@ class Html
      * "Minify" an HTML page
      *
      * @param string $html
-     *
      * @param array $options
      *
      * 'cssMinifier' : (optional) callback function to process content of STYLE
@@ -279,6 +272,12 @@ class Html
         return $this->_html;
     }
 
+    /**
+     * Comments that need to be retained.
+     *
+     * @param array $m
+     * @return string
+     */
     public function commentCB($m)
     {
         if ($this->cacheCompatibility) {
@@ -302,6 +301,12 @@ class Html
         }
     }
 
+    /**
+     * Reserve place with placeholders.
+     *
+     * @param string $content
+     * @return string
+     */
     public function reservePlace($content)
     {
         $placeholder = '%' . $this->replacementHash
@@ -311,16 +316,34 @@ class Html
         return $placeholder;
     }
 
+    /**
+     * Remove pre
+     *
+     * @param array $m
+     * @return string
+     */
     public function removePreCB($m)
     {
         return $this->reservePlace("<pre{$m[1]}");
     }
 
+    /**
+     * Remove textarea
+     *
+     * @param array $m
+     * @return string
+     */
     public function removeTextareaCB($m)
     {
         return $this->reservePlace("<textarea{$m[1]}");
     }
 
+    /**
+     * Remove style
+     *
+     * @param array $m
+     * @return string
+     */
     public function removeStyleCB($m)
     {
         $openStyle = "<style{$m[1]}";
@@ -332,6 +355,7 @@ class Html
         $css = $this->removeCdata($css);
 
         // minify
+        // (removeComments must be supplied via constructor you cannot use removeImportantComments method)
         $minifier = new \Apptrian\Minify\Helper\Css(
             true,
             $this->removeComments
@@ -345,6 +369,12 @@ class Html
         );
     }
 
+    /**
+     * Remove script
+     *
+     * @param array $m
+     * @return string
+     */
     public function removeScriptCB($m)
     {
         $openScript = "<script{$m[2]}";
@@ -387,6 +417,12 @@ class Html
         );
     }
 
+    /**
+     * Remove CDATA
+     *
+     * @param string $str
+     * @return string|mixed
+     */
     public function removeCdata($str)
     {
         return (false !== strpos($str, '<![CDATA['))
@@ -394,6 +430,12 @@ class Html
             : $str;
     }
 
+    /**
+     * Is CDATA needed
+     *
+     * @param string $str
+     * @return boolean
+     */
     public function needsCdata($str)
     {
         return ($this->isXhtml && preg_match(

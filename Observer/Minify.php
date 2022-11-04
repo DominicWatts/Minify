@@ -29,6 +29,8 @@ class Minify implements ObserverInterface
     }
     
     /**
+     * Observer execute method.
+     *
      * @param \Magento\Framework\Event\Observer $observer
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
@@ -38,7 +40,7 @@ class Minify implements ObserverInterface
         if ($minifyEnabled) {
             $response = $observer->getEvent()->getResponse();
             $html     = $response->getBody();
-
+            
             if (stripos($html, '<!DOCTYPE html') !== false) {
                 $type = true;
                 
@@ -62,5 +64,7 @@ class Minify implements ObserverInterface
                 }
             }
         }
+        
+        return $this;
     }
 }

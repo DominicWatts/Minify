@@ -111,7 +111,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getMinifyEnabled()
     {
         if ($this->minifyEnabled === null) {
-            $this->minifyEnabled = $this->getConfig(
+            $this->minifyEnabled = (bool) $this->getConfig(
                 'apptrian_minify/general/enabled'
             );
         }
@@ -127,7 +127,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getCacheCompatibility()
     {
         if ($this->cacheCompatibility === null) {
-            $this->cacheCompatibility = $this->getConfig(
+            $this->cacheCompatibility = (bool) $this->getConfig(
                 'apptrian_minify/general/compatibility'
             );
         }
@@ -143,7 +143,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getMaxMinification()
     {
         if ($this->maxMinification === null) {
-            $this->maxMinification = $this->getConfig(
+            $this->maxMinification = (bool) $this->getConfig(
                 'apptrian_minify/general/max_minification'
             );
         }
@@ -159,7 +159,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getRemoveComments()
     {
         if ($this->removeComments === null) {
-            $this->removeComments = $this->getConfig(
+            $this->removeComments = (bool) $this->getConfig(
                 'apptrian_minify/general/remove_comments'
             );
         }
@@ -191,12 +191,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             return \Apptrian\Minify\Helper\Html::minify($html, $options);
         } catch (\Exception $e) {
             $url = $this->urlInterface->getCurrentUrl();
-            $this->logger->debug(
+            $this->logger->critical(
                 'You have HTML/CSS/JS error on your web page.'
             );
-            $this->logger->debug('Page URL: ' . $url);
-            $this->logger->debug('Exception Message: ' . $e->getMessage());
-            $this->logger->debug('Exception Trace: ' . $e->getTraceAsString());
+            $this->logger->critical('Page URL: ' . $url);
+            $this->logger->critical('Exception Message: ' . $e->getMessage());
+            $this->logger->critical('Exception Trace: ' . $e->getTraceAsString());
             return $html;
         }
     }
