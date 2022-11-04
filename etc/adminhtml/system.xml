@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category  Apptrian
+ * @package   Apptrian_Minify
+ * @author    Apptrian
+ * @copyright Copyright (c) Apptrian (http://www.apptrian.com)
+ * @license   http://opensource.org/licenses/osl-3.0.php Open Software License
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="apptrian_extensions" translate="label" sortOrder="1000000">
+            <label>Apptrian Extensions</label>
+        </tab>
+        <section id="apptrian_minify" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Minify HTML CSS JS</label>
+            <tab>apptrian_extensions</tab>
+            <resource>Apptrian_Minify::config_system</resource>
+            <group id="about" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>About</label>
+                <frontend_model>Apptrian\Minify\Block\Adminhtml\About</frontend_model>
+            </group>
+            <group id="general" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <comment><![CDATA[<h4>WARNING! Use a validator to check the code of your pages before using our extension. You must have error-free HTML code if you want minification to work.</h4><p>Some errors can be ignored but structural errors like stray tags must be fixed. Check your inline CSS code and fix any structural errors like missing braces and similar. Check your inline JavaScript code and fix all structural errors. Usual errors can be found in JSON objects that are not encoded properly or in unterminated strings.</p><h4>Magento version 2 and newer have built-in CSS/JS file merger and minifier. Our extension does not influence this process in any way.</h4><p><strong>WARNING! Use validators to check the code of your pages before using our extension. You must have error-free code in your CSS and JS files if you want minification to work.</strong><br />To enable CSS and JS file minification go to:</p><p>1. <strong>STORES > Configuration > ADVANCED > Developer > CSS Settings</strong><br />2. <strong>STORES > Configuration > ADVANCED > Developer > JavaScript Settings</strong><br />3. From a command line execute the following commands:<br /><strong>php bin/magento cache:flush</strong><br /><strong>php bin/magento setup:static-content:deploy</strong></p>]]></comment>
+                <field id="enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enabled</label>
+                    <comment>Enables or disables the extension.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="max_minification" translate="label comment tooltip" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Maximum Minification</label>
+                    <comment><![CDATA[Enables or disables Maximum HTML Minification.<br />WARNING! Slower and unsafe. See tooltip for more information.]]></comment>
+                    <tooltip>If you enable this option all multiple spaces will be eliminated and replaced with one space. All new line characters will be substituted with one space character. Your entire code will be on one line. This is not recommended, you should keep this option disabled.</tooltip>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="compatibility" translate="label comment" type="select" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Cache Compatibility Mode</label>
+                    <comment><![CDATA[Enables or disables Cache Compatibility Mode.<br />WARNING! You should enable this if you use third-party FPC or Varnish cache extensions.]]></comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="remove_comments" translate="label comment tooltip" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Remove Important Comments</label>
+                    <comment>WARNING! See tooltip for more information.</comment>
+                    <tooltip>If you enable this option important comments will be removed. Sometimes important comments hold copyright information and removing them is considered copyright infringement violation. If you are sure your CSS and JS code does not have important comments with copyright information you can enable this option.</tooltip>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field> 
+            </group>
+        </section>
+    </system>
+</config>
