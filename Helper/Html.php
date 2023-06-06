@@ -36,6 +36,11 @@ namespace Apptrian\Minify\Helper;
 class Html
 {
     /**
+     * @var string
+     */
+    public $html = '';
+    
+    /**
      * @var null|bool
      */
     public $isXhtml = null;
@@ -132,7 +137,7 @@ class Html
      */
     public function __construct($html, $options = [])
     {
-        $this->_html = str_replace("\r\n", "\n", trim($html));
+        $this->html = str_replace("\r\n", "\n", trim($html));
         if (isset($options['xhtml'])) {
             $this->isXhtml = (bool)$options['xhtml'];
         }
@@ -174,7 +179,7 @@ class Html
     {
         if ($this->isXhtml === null) {
             $this->isXhtml = (false !== strpos(
-                $this->_html,
+                $this->html,
                 '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML'
             ));
         }
@@ -184,47 +189,47 @@ class Html
         $this->placeholders = [];
 
         // replace SCRIPTs (and minify) with placeholders
-        $this->_html = preg_replace_callback(
+        $this->html = preg_replace_callback(
             '/(\\s*)<script(\\b[^>]*?>)([\\s\\S]*?)<\\/script>(\\s*)/i',
             [$this, 'removeScriptCB'],
-            $this->_html
+            $this->html
         );
 
         // replace STYLEs (and minify) with placeholders
-        $this->_html = preg_replace_callback(
+        $this->html = preg_replace_callback(
             '/\\s*<style(\\b[^>]*>)([\\s\\S]*?)<\\/style>\\s*/i',
             [$this, 'removeStyleCB'],
-            $this->_html
+            $this->html
         );
 
         // remove HTML comments (not containing IE conditional comments).
-        $this->_html = preg_replace_callback(
+        $this->html = preg_replace_callback(
             '/<!--([\\s\\S]*?)-->/',
             [$this, 'commentCB'],
-            $this->_html
+            $this->html
         );
 
         // replace PREs with placeholders
-        $this->_html = preg_replace_callback(
+        $this->html = preg_replace_callback(
             '/\\s*<pre(\\b[^>]*?>[\\s\\S]*?<\\/pre>)\\s*/i',
             [$this, 'removePreCB'],
-            $this->_html
+            $this->html
         );
 
         // replace TEXTAREAs with placeholders
-        $this->_html = preg_replace_callback(
+        $this->html = preg_replace_callback(
             '/\\s*<textarea(\\b[^>]*?>[\\s\\S]*?<\\/textarea>)\\s*/i',
             [$this, 'removeTextareaCB'],
-            $this->_html
+            $this->html
         );
 
         // trim each line.
         // To be done > take into account attribute values that span multiple
         // lines.
-        $this->_html = preg_replace('/^\\s+|\\s+$/m', '', $this->_html);
+        $this->html = preg_replace('/^\\s+|\\s+$/m', '', $this->html);
 
         // remove ws around block/undisplayed elements
-        $this->_html = preg_replace(
+        $this->html = preg_replace(
             '/\\s+(<\\/?(?:area|article|aside|base(?:font)?|blockquote|body'
             .'|canvas|caption|center|col(?:group)?|dd|dir|div|dl|dt|fieldset'
             .'|figcaption|figure|footer|form|frame(?:set)?|h[1-6]|head|header'
@@ -232,44 +237,44 @@ class Html
             .'|opt(?:group|ion)|output|p|param|section'
             .'|t(?:able|body|head|d|h||r|foot|itle)|ul|video)\\b[^>]*>)/i',
             '$1',
-            $this->_html
+            $this->html
         );
 
         // remove ws outside of all elements
-        $this->_html = preg_replace(
+        $this->html = preg_replace(
             '/>(\\s(?:\\s*))?([^<]+)(\\s(?:\s*))?</',
             '>$1$2$3<',
-            $this->_html
+            $this->html
         );
 
         if ($this->maxMinification) {
             // Strip all multiple spaces to one space
-            $this->_html = preg_replace('/\s+/ui', ' ', $this->_html);
+            $this->html = preg_replace('/\s+/ui', ' ', $this->html);
         } else {
             // use newlines before 1st attribute in open tags
             // (to limit line lengths)
-            $this->_html = preg_replace(
+            $this->html = preg_replace(
                 '/(<[a-z\\-]+)\\s+([^>]+>)/i',
                 "$1\n$2",
-                $this->_html
+                $this->html
             );
         }
         
         // fill placeholders
-        $this->_html = str_replace(
+        $this->html = str_replace(
             array_keys($this->placeholders),
             array_values($this->placeholders),
-            $this->_html
+            $this->html
         );
         // issue 229: multi-pass to catch scripts that didn't get replaced
         // in textareas
-        $this->_html = str_replace(
+        $this->html = str_replace(
             array_keys($this->placeholders),
             array_values($this->placeholders),
-            $this->_html
+            $this->html
         );
 
-        return $this->_html;
+        return $this->html;
     }
 
     /**

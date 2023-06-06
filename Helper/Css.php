@@ -37,11 +37,30 @@ namespace Apptrian\Minify\Helper;
 
 class Css
 {
-    const QUERY_FRACTION = '_CSSMIN_QF_';
-    const COMMENT_TOKEN = '_CSSMIN_CMT_%d_';
-    const COMMENT_TOKEN_START = '_CSSMIN_CMT_';
-    const RULE_BODY_TOKEN = '_CSSMIN_RBT_%d_';
-    const PRESERVED_TOKEN = '_CSSMIN_PTK_%d_';
+    /**
+     * @var string
+     */
+    private $queryFraction = '_CSSMIN_QF_';
+    
+    /**
+     * @var string
+     */
+    private $commentToken = '_CSSMIN_CMT_%d_';
+    
+    /**
+     * @var string
+     */
+    private $commentTokenStart = '_CSSMIN_CMT_';
+    
+    /**
+     * @var string
+     */
+    private $ruleBodyToken = '_CSSMIN_RBT_%d_';
+    
+    /**
+     * @var string
+     */
+    private $preservedToken = '_CSSMIN_PTK_%d_';
     
     // Token lists
     /**
@@ -350,7 +369,7 @@ class Css
      */
     private function registerPreservedToken($token)
     {
-        $tokenId = sprintf(self::PRESERVED_TOKEN, count($this->preservedTokens));
+        $tokenId = sprintf($this->preservedToken, count($this->preservedTokens));
         $this->preservedTokens[$tokenId] = $token;
         return $tokenId;
     }
@@ -363,7 +382,7 @@ class Css
      */
     private function registerCommentToken($comment)
     {
-        $tokenId = sprintf(self::COMMENT_TOKEN, count($this->comments));
+        $tokenId = sprintf($this->commentToken, count($this->comments));
         $this->comments[$tokenId] = $comment;
         return $tokenId;
     }
@@ -380,7 +399,7 @@ class Css
             return '';
         }
 
-        $tokenId = sprintf(self::RULE_BODY_TOKEN, count($this->ruleBodies));
+        $tokenId = sprintf($this->ruleBodyToken, count($this->ruleBodies));
         $this->ruleBodies[$tokenId] = $body;
         return $tokenId;
     }
@@ -541,7 +560,7 @@ class Css
 
         // maybe the string contains a comment-like substring?
         // one, maybe more? put'em back then
-        if (strpos($match, self::COMMENT_TOKEN_START) !== false) {
+        if (strpos($match, $this->commentTokenStart) !== false) {
             $match = strtr($match, $this->comments);
         }
 
@@ -833,7 +852,7 @@ class Css
 
         // Find a fraction that may used in some @media queries such as: (min-aspect-ratio: 1/1)
         // Add token to add the "/" back in later
-        $css = preg_replace('/\(([a-z-]+):([0-9]+)\/([0-9]+)\)/Si', '($1:$2'. self::QUERY_FRACTION .'$3)', $css);
+        $css = preg_replace('/\(([a-z-]+):([0-9]+)\/([0-9]+)\)/Si', '($1:$2'. $this->queryFraction .'$3)', $css);
 
         // Remove empty rule blocks up to 2 levels deep.
         $css = preg_replace(array_fill(0, 2, '/(\{)[^{};\/\n]+\{\}/S'), '$1', $css);
@@ -845,7 +864,7 @@ class Css
         }
         
         // Restore fraction
-        $css = str_replace(self::QUERY_FRACTION, '/', $css);
+        $css = str_replace($this->queryFraction, '/', $css);
 
         // Lowercase some popular @directives
         $css = preg_replace_callback(
