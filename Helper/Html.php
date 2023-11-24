@@ -288,8 +288,10 @@ class Html
         if ($this->cacheCompatibility) {
             return (0 === strpos($m[1], '[')
                 || false !== strpos($m[1], '<![')
+                || false !== stripos($m[1], 'ko ')
                 || false !== stripos($m[1], ' ko ')
                 || false !== stripos($m[1], ' /ko ')
+                || false !== stripos($m[1], ' /ko')
                 || false !== stripos($m[1], 'esi <')
                 || false !== stripos($m[1], ' fpc')
             )
@@ -298,8 +300,10 @@ class Html
         } else {
             return (0 === strpos($m[1], '[')
                 || false !== strpos($m[1], '<![')
+                || false !== stripos($m[1], 'ko ')
                 || false !== stripos($m[1], ' ko ')
                 || false !== stripos($m[1], ' /ko ')
+                || false !== stripos($m[1], ' /ko')
             )
                 ? $m[0]
                 : '';
