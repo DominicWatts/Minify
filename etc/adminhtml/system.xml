@@ -13,7 +13,7 @@
         <tab id="apptrian_extensions" translate="label" sortOrder="1000000">
             <label>Apptrian Extensions</label>
         </tab>
-        <section id="apptrian_minify" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+        <section id="apptrian_minify" translate="label" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Minify HTML CSS JS</label>
             <tab>apptrian_extensions</tab>
             <resource>Apptrian_Minify::config_system</resource>

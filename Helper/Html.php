@@ -288,10 +288,12 @@ class Html
         if ($this->cacheCompatibility) {
             return (0 === strpos($m[1], '[')
                 || false !== strpos($m[1], '<![')
-                || false !== stripos($m[1], 'ko ')
                 || false !== stripos($m[1], ' ko ')
                 || false !== stripos($m[1], ' /ko ')
+                || false !== stripos($m[1], 'ko ')
                 || false !== stripos($m[1], ' /ko')
+                || false !== stripos($m[1], 'ko')
+                || false !== stripos($m[1], '/ko')
                 || false !== stripos($m[1], 'esi <')
                 || false !== stripos($m[1], ' fpc')
             )
@@ -300,10 +302,12 @@ class Html
         } else {
             return (0 === strpos($m[1], '[')
                 || false !== strpos($m[1], '<![')
-                || false !== stripos($m[1], 'ko ')
                 || false !== stripos($m[1], ' ko ')
                 || false !== stripos($m[1], ' /ko ')
+                || false !== stripos($m[1], 'ko ')
                 || false !== stripos($m[1], ' /ko')
+                || false !== stripos($m[1], 'ko')
+                || false !== stripos($m[1], '/ko')
             )
                 ? $m[0]
                 : '';
@@ -395,6 +399,14 @@ class Html
 
         // remove HTML comments (and ending "//" if present)
         if ($this->jsCleanComments) {
+            // Remove all HTML comments with single and multi line comments inside them
+            $js = preg_replace(
+                '/<!--\s*\/(.*?)\/\s*-->/',
+                '',
+                $js
+            );
+            
+            // Remove all HTML comments with single line comments inside them
             $js = preg_replace(
                 '/(?:^\\s*<!--\\s*|\\s*(?:\\/\\/)?\\s*-->\\s*$)/',
                 '',
